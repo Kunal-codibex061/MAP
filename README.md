@@ -65,7 +65,11 @@ Run this from this folder, then open http://localhost:8000/?city=mumbai. Opening
 ```bash
 npx vercel@65.7.0 deploy --prod
 ```
-`cities/` and `tools/` are not uploaded (see `.vercelignore`); only the app and `data/` are.
+This is a static site: `vercel.json` sets `framework: null`, and `cities/` and `tools/`
+are not uploaded (see `.vercelignore`); only the app and `data/` are. If the Vercel
+project was created with a Python preset (the repo has Python tools), set
+**Settings → Build & Development Settings → Framework Preset** to **Other** once, then
+redeploy.
 
 ## Files
 - `index.html`, `styles.css`, `app.js`: the app (plain JavaScript and MapLibre GL JS 4.7.1). Everything city-specific is read from `data/<city>/`.
@@ -81,7 +85,7 @@ npx vercel@65.7.0 deploy --prod
   - `fetch_boundaries.py`: one-time boundary download; needs `shapely`.
   - `build_heights.py`: building heights; needs `rasterio numpy s2sphere`.
   - `sample_csv.py`: sample CSVs for a city without real data (Delhi).
-  - `requirements.txt`: optional dependencies for `fetch_boundaries.py` and `build_heights.py`.
+  - `optional-requirements.txt`: optional dependencies for `fetch_boundaries.py` and `build_heights.py`.
 
 ## How the map works
 - **Levels.** Each city's polygon levels fade into one another as you zoom. Point levels (areas, colonies, localities) appear next, then pins. Mumbai and Bengaluru pins are societies; click one for every configuration and its source link.
