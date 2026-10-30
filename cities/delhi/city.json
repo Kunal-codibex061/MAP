@@ -1,0 +1,32 @@
+{
+  "id": "delhi",
+  "name": "Delhi",
+  "sample": true,
+  "dataLabel": "Sample listings, registered deals and broker inputs",
+  "bbox": [76.83, 28.40, 77.35, 28.89],
+  "view": { "center": [77.16, 28.62], "zoom": 10.35, "mobileZoom": 9.7, "pitch": 55, "bearing": -10 },
+  "defaultUnit": "yd",
+  "guidance": { "label": "Circle rate", "source": "Delhi circle rates (sample)" },
+  "types": [
+    { "id": "plot", "name": "Plot", "land": true },
+    { "id": "floor", "name": "Builder floor" },
+    { "id": "apartment", "name": "Apartment" }
+  ],
+  "levels": [
+    { "key": "district", "name": "District", "plural": "districts", "kind": "polygon", "file": "district.geojson", "from": 0, "fit": 10.6 },
+    { "key": "ward", "name": "Ward", "plural": "wards", "kind": "polygon", "file": "ward.geojson", "from": 10.9, "fit": 14.5, "colorScale": true },
+    { "key": "area", "name": "Colony", "plural": "colonies", "kind": "point", "from": 12.9, "to": 15.6 }
+  ],
+  "pinsFrom": 14.6,
+  "credits": [
+    "Boundaries: districts © OpenStreetMap contributors (ODbL); wards (DataMeet, CC BY-SA 2.5 IN; pre-2022 delimitation)",
+    "Colonies: © OpenStreetMap contributors (ODbL)"
+  ],
+  "landmarks": [
+    ["India Gate", 28.6129, 77.2295], ["Connaught Place", 28.6315, 77.2167], ["Red Fort", 28.6562, 77.2410],
+    ["Qutub Minar", 28.5245, 77.1855], ["IGI Airport T3", 28.5562, 77.1000], ["Lodhi Garden", 28.5931, 77.2197],
+    ["Hauz Khas Village", 28.5535, 77.1940], ["Chandni Chowk", 28.6506, 77.2303], ["Akshardham", 28.6127, 77.2773],
+    ["Nehru Place", 28.5490, 77.2510], ["Select Citywalk, Saket", 28.5286, 77.2193], ["Dwarka Sector 21", 28.5522, 77.0583],
+    ["Rajouri Garden", 28.6492, 77.1220], ["Lajpat Nagar", 28.5677, 77.2433], ["Khan Market", 28.6003, 77.2270]
+  ]
+}

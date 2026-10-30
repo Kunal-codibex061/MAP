@@ -1,0 +1,10 @@
+# Optional dependencies for the one-time data preparation scripts.
+# tools/ingest.py and tools/sample_csv.py need only the Python 3 standard library.
+
+# tools/fetch_boundaries.py
+shapely>=2.0
+
+# tools/build_heights.py
+numpy>=1.24
+rasterio>=1.3
+s2sphere>=0.1.3

@@ -1,0 +1,151 @@
+{
+ "id": "bengaluru",
+ "name": "Bengaluru",
+ "sample": true,
+ "dataLabel": "Sample listings, registered deals and broker inputs",
+ "bbox": [
+  77.4,
+  12.8,
+  77.85,
+  13.2
+ ],
+ "view": {
+  "center": [
+   77.612,
+   12.962
+  ],
+  "zoom": 11.55,
+  "mobileZoom": 11.05,
+  "pitch": 56,
+  "bearing": -18
+ },
+ "defaultUnit": "yd",
+ "guidance": {
+  "label": "Guidance value",
+  "source": "Kaveri format (sample)"
+ },
+ "credits": [
+  "Boundaries: GBA corporations and zones 2025 (OpenCity, public domain), BBMP wards 2022 (DataMeet, CC BY-SA 2.5 IN)",
+  "Localities: \u00a9 OpenStreetMap contributors (ODbL)"
+ ],
+ "pinsFrom": 14.6,
+ "societies": false,
+ "asOf": "2026-10-26",
+ "builtAt": "2026-10-29 18:05 UTC",
+ "types": [
+  {
+   "id": "plot",
+   "name": "Plot",
+   "land": true,
+   "index": 0,
+   "sale": 2833,
+   "rent": 0,
+   "sizeMin": 600,
+   "sizeMax": 4000
+  },
+  {
+   "id": "apartment",
+   "name": "Apartment",
+   "index": 1,
+   "sale": 2072,
+   "rent": 1398,
+   "sizeMin": 650,
+   "sizeMax": 3200
+  },
+  {
+   "id": "floor",
+   "name": "Builder floor",
+   "index": 2,
+   "sale": 1962,
+   "rent": 1304,
+   "sizeMin": 1200,
+   "sizeMax": 4500
+  }
+ ],
+ "bhk": [
+  {
+   "id": "1BHK",
+   "n": 395
+  },
+  {
+   "id": "2BHK",
+   "n": 374
+  },
+  {
+   "id": "3BHK",
+   "n": 2087
+  },
+  {
+   "id": "4BHK",
+   "n": 1866
+  },
+  {
+   "id": "5BHK",
+   "n": 2014
+  }
+ ],
+ "levels": [
+  {
+   "key": "corporation",
+   "name": "Corporation",
+   "plural": "corporations",
+   "kind": "polygon",
+   "from": 0,
+   "fit": 10.15,
+   "count": 5
+  },
+  {
+   "key": "zone",
+   "name": "Zone",
+   "plural": "zones",
+   "kind": "polygon",
+   "from": 10.45,
+   "fit": 10.75,
+   "count": 10
+  },
+  {
+   "key": "ward",
+   "name": "Ward",
+   "plural": "wards",
+   "kind": "polygon",
+   "from": 11.0,
+   "fit": 15,
+   "colorScale": true,
+   "count": 243
+  },
+  {
+   "key": "area",
+   "name": "Locality",
+   "plural": "localities",
+   "kind": "point",
+   "from": 12.9,
+   "to": 15.6,
+   "count": 270
+  }
+ ],
+ "heights": "heights/index.json",
+ "report": {
+  "files": [
+   "bengaluru_sample.csv"
+  ],
+  "rowsRead": 10859,
+  "pointsUsed": 9569,
+  "sale": 6867,
+  "rent": 2702,
+  "skipped": {
+   "duplicate": 665,
+   "outlier (typo or wrong unit)": 85
+  },
+  "governmentRates": 540,
+  "portalReferences": 0,
+  "societySummariesUsed": 0,
+  "societies": 0,
+  "areas": 270,
+  "wardMismatches": {},
+  "outside": {
+   "corporation": 0,
+   "zone": 0,
+   "ward": 0
+  }
+ }
+}

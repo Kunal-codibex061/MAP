@@ -1,0 +1,12 @@
+# Only the static app and data/ are deployed. Source data, the CSV pipeline and
+# the boundary/height preparation scripts stay local.
+cities/
+tools/
+/Banglore/
+/MUMBAI/
+.git/
+.gitignore
+.vercelignore
+*.zip
+.DS_Store
+__pycache__/

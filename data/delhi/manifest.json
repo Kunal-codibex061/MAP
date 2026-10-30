@@ -1,0 +1,141 @@
+{
+ "id": "delhi",
+ "name": "Delhi",
+ "sample": true,
+ "dataLabel": "Sample listings, registered deals and broker inputs",
+ "bbox": [
+  76.83,
+  28.4,
+  77.35,
+  28.89
+ ],
+ "view": {
+  "center": [
+   77.16,
+   28.62
+  ],
+  "zoom": 10.35,
+  "mobileZoom": 9.7,
+  "pitch": 55,
+  "bearing": -10
+ },
+ "defaultUnit": "yd",
+ "guidance": {
+  "label": "Circle rate",
+  "source": "Delhi circle rates (sample)"
+ },
+ "credits": [
+  "Boundaries: districts \u00a9 OpenStreetMap contributors (ODbL); wards (DataMeet, CC BY-SA 2.5 IN; pre-2022 delimitation)",
+  "Colonies: \u00a9 OpenStreetMap contributors (ODbL)"
+ ],
+ "pinsFrom": 14.6,
+ "societies": false,
+ "asOf": "2026-10-26",
+ "builtAt": "2026-10-29 18:05 UTC",
+ "types": [
+  {
+   "id": "plot",
+   "name": "Plot",
+   "land": true,
+   "index": 0,
+   "sale": 2781,
+   "rent": 0,
+   "sizeMin": 450,
+   "sizeMax": 4500
+  },
+  {
+   "id": "floor",
+   "name": "Builder floor",
+   "index": 1,
+   "sale": 3129,
+   "rent": 1755,
+   "sizeMin": 900,
+   "sizeMax": 3600
+  },
+  {
+   "id": "apartment",
+   "name": "Apartment",
+   "index": 2,
+   "sale": 2144,
+   "rent": 1256,
+   "sizeMin": 600,
+   "sizeMax": 2200
+  }
+ ],
+ "bhk": [
+  {
+   "id": "1BHK",
+   "n": 385
+  },
+  {
+   "id": "2BHK",
+   "n": 2503
+  },
+  {
+   "id": "3BHK",
+   "n": 2069
+  },
+  {
+   "id": "4BHK",
+   "n": 2112
+  },
+  {
+   "id": "5BHK",
+   "n": 1215
+  }
+ ],
+ "levels": [
+  {
+   "key": "district",
+   "name": "District",
+   "plural": "districts",
+   "kind": "polygon",
+   "from": 0,
+   "fit": 10.6,
+   "count": 13
+  },
+  {
+   "key": "ward",
+   "name": "Ward",
+   "plural": "wards",
+   "kind": "polygon",
+   "from": 10.9,
+   "fit": 14.5,
+   "colorScale": true,
+   "count": 290
+  },
+  {
+   "key": "area",
+   "name": "Colony",
+   "plural": "colonies",
+   "kind": "point",
+   "from": 12.9,
+   "to": 15.6,
+   "count": 238
+  }
+ ],
+ "heights": "heights/index.json",
+ "report": {
+  "files": [
+   "delhi_sample.csv"
+  ],
+  "rowsRead": 12428,
+  "pointsUsed": 11065,
+  "sale": 8054,
+  "rent": 3011,
+  "skipped": {
+   "duplicate": 779,
+   "outlier (typo or wrong unit)": 108
+  },
+  "governmentRates": 476,
+  "portalReferences": 0,
+  "societySummariesUsed": 0,
+  "societies": 0,
+  "areas": 238,
+  "wardMismatches": {},
+  "outside": {
+   "district": 0,
+   "ward": 0
+  }
+ }
+}

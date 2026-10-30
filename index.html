@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Property Price Map</title>
+<meta name="description" content="Prototype: map of property prices in Bengaluru, Mumbai and Delhi, from city-wide areas down to individual streets and societies.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div id="map" aria-label="Map of property prices"></div>
+
+<!-- Top bar -->
+<header class="topbar">
+  <div class="brand" id="brand">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <div class="brand-text">
+      <button class="city-btn" id="city-btn" aria-haspopup="listbox" aria-expanded="false" aria-label="Choose city">
+        <strong><span id="brand-city">…</span> Price Map</strong>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5 10 12.5 15 7.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="demo-pill" id="demo-pill"></span>
+    </div>
+    <ul class="city-menu card" id="city-menu" role="listbox" hidden></ul>
+  </div>
+
+  <div class="search" role="search">
+    <svg class="search-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M8.5 3a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11Zm0-1.5a7 7 0 1 0 4.39 12.45l3.83 3.83 1.06-1.06-3.83-3.83A7 7 0 0 0 8.5 1.5Z" fill="currentColor"/></svg>
+    <input id="search" type="search" placeholder="Search area, society, street or landmark" autocomplete="off" aria-label="Search area, society, street or landmark">
+    <kbd class="search-kbd">/</kbd>
+    <ul id="search-results" class="search-results" role="listbox" hidden></ul>
+  </div>
+
+  <div class="top-actions">
+    <div class="seg" id="unit-seg" role="radiogroup" aria-label="Price unit">
+      <button data-unit="yd" role="radio" aria-checked="false">sq yd</button>
+      <button data-unit="ft" role="radio" aria-checked="false">sq ft</button>
+      <button data-unit="m" role="radio" aria-checked="false">sq m</button>
+    </div>
+    <button id="view-toggle" class="pill-btn" aria-label="Switch between 3D and 2D view">
+      <span class="view-3d">3D</span><span class="view-2d">2D</span>
+    </button>
+    <button id="tour-btn" class="tour-btn" aria-label="Play a one-minute guided tour" title="Guided tour">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6.5 4.6v10.8a.8.8 0 0 0 1.2.7l8.6-5.4a.8.8 0 0 0 0-1.4L7.7 3.9a.8.8 0 0 0-1.2.7Z" fill="currentColor"/></svg>
+      <span>Tour</span>
+    </button>
+    <button id="home-btn" class="icon-btn" aria-label="Back to city view" title="Back to city view">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4.5l8 6.7V20a1 1 0 0 1-1 1h-4.6v-5.6H9.6V21H5a1 1 0 0 1-1-1v-8.8Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+    </button>
+    <button id="theme-toggle" class="icon-btn" aria-label="Switch light or dark theme" title="Light / dark">
+      <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M5.3 18.7l1.5-1.5M17.2 6.8l1.5-1.5"/></g></svg>
+      <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 14.6A8.5 8.5 0 0 1 9.4 3.8 8.5 8.5 0 1 0 20.2 14.6Z" fill="currentColor"/></svg>
+    </button>
+    <button id="about-btn" class="icon-btn" aria-label="About this prototype and its data" title="About">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 11v5.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7.9" r="1.2" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- Filters -->
+<aside class="filters card" id="filters" aria-label="Filters">
+  <button class="filters-head" id="filters-head" aria-expanded="true">
+    <span>Filters &amp; layers</span>
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5 10 12.5 15 7.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <div class="filters-body">
+    <div class="field mobile-only">
+      <label class="field-label">City</label>
+      <div class="seg seg-full" id="city-seg" role="radiogroup" aria-label="City"></div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Property type</label>
+      <div class="seg seg-full" id="type-seg" role="radiogroup" aria-label="Property type"></div>
+      <p class="hint" id="type-hint"></p>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Deal</label>
+      <div class="seg seg-full" id="deal-seg" role="radiogroup" aria-label="Sale or rent">
+        <button data-deal="0" class="active">Sale</button>
+        <button data-deal="1">Rent</button>
+      </div>
+      <p class="hint" id="deal-hint" hidden></p>
+    </div>
+
+    <div class="field" id="bhk-field" hidden>
+      <label class="field-label">Configuration</label>
+      <div class="chips" id="bhk-chips" role="group" aria-label="Configuration"></div>
+    </div>
+
+    <div class="field">
+      <div class="field-row">
+        <label class="field-label">Size</label>
+        <span class="field-value" id="size-value"></span>
+      </div>
+      <div class="range" id="size-range">
+        <div class="range-track"><div class="range-fill" id="size-fill"></div></div>
+        <input type="range" id="size-min" aria-label="Minimum size">
+        <input type="range" id="size-max" aria-label="Maximum size">
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Data sources</label>
+      <div class="checks" id="source-checks"></div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Map layers</label>
+      <div class="toggles">
+        <label class="toggle"><input type="checkbox" data-layer="zones" checked><span class="sw"></span>Areas shaded by price</label>
+        <label class="toggle"><input type="checkbox" data-layer="pins" checked><span class="sw"></span><span id="pins-label">Price pins</span></label>
+        <label class="toggle"><input type="checkbox" data-layer="buildings" checked><span class="sw"></span>Buildings tinted by price</label>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- Legend -->
+<section class="legend card" id="legend" aria-label="Legend">
+  <div class="legend-title">
+    <span id="legend-title">Median price</span>
+    <span class="legend-unit" id="legend-unit"></span>
+  </div>
+  <div class="legend-bar" id="legend-bar"></div>
+  <div class="legend-ticks" id="legend-ticks"></div>
+  <div class="legend-low"><span class="low-swatch"></span><span id="legend-low">Fewer than 5 data points (low confidence)</span></div>
+  <div class="legend-source" id="legend-source"></div>
+</section>
+
+<!-- Where am I -->
+<nav class="crumbs card" id="crumbs" aria-label="Current location"></nav>
+
+<!-- Detail panel -->
+<aside class="panel card" id="panel" aria-label="Area details" hidden>
+  <div class="panel-grip" aria-hidden="true"></div>
+  <button class="panel-close icon-btn" id="panel-close" aria-label="Close details">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5 5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  </button>
+  <div class="panel-body" id="panel-body"></div>
+</aside>
+
+<!-- About / welcome -->
+<div class="modal-wrap" id="about" hidden>
+  <div class="modal card" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <button class="panel-close icon-btn" id="about-close" aria-label="Close">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5 5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <div class="modal-body">
+      <div class="p-kicker">Prototype</div>
+      <h2 id="about-title">Property Price Map</h2>
+      <p class="modal-lead" id="about-lead"></p>
+      <div class="modal-warn" id="about-warn"></div>
+
+      <h3>How to use it</h3>
+      <ul class="howto">
+        <li><span class="howto-i">1</span><div id="howto-zoom"></div></li>
+        <li><span class="howto-i">2</span><div id="howto-click"></div></li>
+        <li><span class="howto-i">3</span><div id="howto-filters"></div></li>
+        <li><span class="howto-i">4</span><div><b>Search</b> any area, society, street or landmark. Switch city from the title, and use 3D/2D and sq yd/sq ft/sq m in the top bar.</div></li>
+      </ul>
+
+      <h3>How the numbers are made</h3>
+      <div id="about-data"></div>
+      <ul class="rules" id="about-rules"></ul>
+      <p class="modal-credits" id="about-credits"></p>
+      <div class="modal-actions">
+        <button class="primary-btn" id="about-tour">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6.5 4.6v10.8a.8.8 0 0 0 1.2.7l8.6-5.4a.8.8 0 0 0 0-1.4L7.7 3.9a.8.8 0 0 0-1.2.7Z" fill="currentColor"/></svg>
+          Take the 1-minute tour
+        </button>
+        <button class="secondary-btn" id="about-go">Explore on my own</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Guided tour -->
+<section class="tour card" id="tour" aria-live="polite" hidden>
+  <div class="tour-top">
+    <span class="tour-step" id="tour-step"></span>
+    <button class="link-btn" id="tour-exit">Exit tour</button>
+  </div>
+  <div class="tour-title" id="tour-title"></div>
+  <div class="tour-text" id="tour-text"></div>
+  <div class="tour-bar"><span id="tour-progress"></span></div>
+  <div class="tour-actions">
+    <button class="secondary-btn small" id="tour-prev">Back</button>
+    <button class="secondary-btn small" id="tour-pause">Pause</button>
+    <button class="primary-btn small" id="tour-next">Next</button>
+  </div>
+</section>
+
+<div class="hint-toast" id="hint-toast"></div>
+
+<div class="loader" id="loader">
+  <div class="loader-inner">
+    <div class="spinner"></div>
+    <span id="loader-text">Loading map…</span>
+  </div>
+</div>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

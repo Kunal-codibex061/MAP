@@ -1,0 +1,17 @@
+[
+ {
+  "id": "bengaluru",
+  "name": "Bengaluru",
+  "sample": true
+ },
+ {
+  "id": "mumbai",
+  "name": "Mumbai",
+  "sample": false
+ },
+ {
+  "id": "delhi",
+  "name": "Delhi",
+  "sample": true
+ }
+]

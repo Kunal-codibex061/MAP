@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Tool caches (large, re-downloadable)
+tools/.overpass_cache/
+tools/.gob_cache/
+
+# Incoming data deliveries kept locally, not part of the app
+# (root-only: cities/mumbai and data/mumbai must stay tracked)
+/Banglore/
+/MUMBAI/
+
+# Archives and local env
+*.zip
+.env
+.env.*
+.vercel/

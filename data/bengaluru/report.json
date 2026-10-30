@@ -1,0 +1,24 @@
+{
+ "files": [
+  "bengaluru_sample.csv"
+ ],
+ "rowsRead": 10859,
+ "pointsUsed": 9569,
+ "sale": 6867,
+ "rent": 2702,
+ "skipped": {
+  "duplicate": 665,
+  "outlier (typo or wrong unit)": 85
+ },
+ "governmentRates": 540,
+ "portalReferences": 0,
+ "societySummariesUsed": 0,
+ "societies": 0,
+ "areas": 270,
+ "wardMismatches": {},
+ "outside": {
+  "corporation": 0,
+  "zone": 0,
+  "ward": 0
+ }
+}

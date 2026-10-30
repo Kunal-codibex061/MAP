@@ -1,0 +1,32 @@
+{
+  "id": "mumbai",
+  "name": "Mumbai",
+  "sample": false,
+  "dataLabel": "SquareYards project listings, Housing.com area averages, Maharashtra IGR ready reckoner",
+  "bbox": [72.77, 18.88, 73.22, 19.33],
+  "view": { "center": [72.875, 19.075], "zoom": 10.75, "mobileZoom": 10.1, "pitch": 56, "bearing": -12 },
+  "defaultUnit": "ft",
+  "guidance": { "label": "Ready reckoner rate", "source": "Maharashtra IGR (ASR)" },
+  "types": [
+    { "id": "apartment", "name": "Apartment" },
+    { "id": "plot", "name": "Plot", "land": true }
+  ],
+  "levels": [
+    { "key": "region", "name": "Region", "plural": "regions", "kind": "polygon", "file": "region.geojson", "from": 0, "fit": 10.6 },
+    { "key": "ward", "name": "Ward", "plural": "wards", "kind": "polygon", "file": "ward.geojson", "from": 11.0, "fit": 14, "colorScale": true, "csvColumn": "ward" },
+    { "key": "area", "name": "Area", "plural": "areas", "kind": "point", "from": 12.4, "to": 15.0 }
+  ],
+  "societies": true,
+  "pinsFrom": 13.9,
+  "credits": [
+    "Prices: SquareYards project pages and Housing.com price trends, collected 29 Oct 2026 (batch 1); ready reckoner: Maharashtra IGR",
+    "Boundaries: BMC wards (DataMeet, CC BY-SA 2.5 IN); Navi Mumbai, Thane, Mira-Bhayandar outlines © OpenStreetMap contributors (ODbL)"
+  ],
+  "landmarks": [
+    ["Gateway of India", 18.9220, 72.8347], ["Chhatrapati Shivaji Terminus", 18.9400, 72.8355], ["Marine Drive", 18.9440, 72.8230],
+    ["Bandra-Worli Sea Link", 19.0380, 72.8180], ["Bandra Kurla Complex (BKC)", 19.0660, 72.8650], ["Powai Lake", 19.1250, 72.9050],
+    ["Juhu Beach", 19.0980, 72.8260], ["Mumbai Airport T2", 19.0989, 72.8740], ["Phoenix Palladium, Lower Parel", 18.9940, 72.8250],
+    ["Andheri Station", 19.1197, 72.8464], ["Thane Station", 19.1860, 72.9750], ["Vashi", 19.0771, 72.9986],
+    ["Siddhivinayak Temple", 19.0169, 72.8303], ["Haji Ali", 18.9827, 72.8089], ["Sanjay Gandhi National Park", 19.2147, 72.9106]
+  ]
+}

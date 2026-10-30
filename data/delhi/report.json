@@ -1,0 +1,23 @@
+{
+ "files": [
+  "delhi_sample.csv"
+ ],
+ "rowsRead": 12428,
+ "pointsUsed": 11065,
+ "sale": 8054,
+ "rent": 3011,
+ "skipped": {
+  "duplicate": 779,
+  "outlier (typo or wrong unit)": 108
+ },
+ "governmentRates": 476,
+ "portalReferences": 0,
+ "societySummariesUsed": 0,
+ "societies": 0,
+ "areas": 238,
+ "wardMismatches": {},
+ "outside": {
+  "district": 0,
+  "ward": 0
+ }
+}

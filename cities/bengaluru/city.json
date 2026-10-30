@@ -1,0 +1,35 @@
+{
+  "id": "bengaluru",
+  "name": "Bengaluru",
+  "sample": true,
+  "dataLabel": "Sample listings, registered deals and broker inputs",
+  "bbox": [77.40, 12.80, 77.85, 13.20],
+  "view": { "center": [77.612, 12.962], "zoom": 11.55, "mobileZoom": 11.05, "pitch": 56, "bearing": -18 },
+  "defaultUnit": "yd",
+  "guidance": { "label": "Guidance value", "source": "Kaveri format (sample)" },
+  "types": [
+    { "id": "plot", "name": "Plot", "land": true },
+    { "id": "apartment", "name": "Apartment" },
+    { "id": "floor", "name": "Builder floor" }
+  ],
+  "levels": [
+    { "key": "corporation", "name": "Corporation", "plural": "corporations", "kind": "polygon", "file": "corporation.geojson", "from": 0, "fit": 10.15 },
+    { "key": "zone", "name": "Zone", "plural": "zones", "kind": "polygon", "file": "zone.geojson", "from": 10.45, "fit": 10.75 },
+    { "key": "ward", "name": "Ward", "plural": "wards", "kind": "polygon", "file": "ward.geojson", "from": 11.0, "fit": 15, "colorScale": true },
+    { "key": "area", "name": "Locality", "plural": "localities", "kind": "point", "from": 12.9, "to": 15.6 }
+  ],
+  "pinsFrom": 14.6,
+  "credits": [
+    "Boundaries: GBA corporations and zones 2025 (OpenCity, public domain), BBMP wards 2022 (DataMeet, CC BY-SA 2.5 IN)",
+    "Localities: © OpenStreetMap contributors (ODbL)"
+  ],
+  "landmarks": [
+    ["MG Road", 12.9756, 77.6066], ["Indiranagar 100 Ft Road", 12.9719, 77.6412], ["Koramangala 5th Block", 12.9345, 77.6190],
+    ["HSR Layout Sector 1", 12.9116, 77.6389], ["Whitefield ITPL", 12.9857, 77.7362], ["Bellandur ORR", 12.9260, 77.6762],
+    ["Sarjapur Road", 12.9116, 77.6858], ["Manyata Tech Park", 13.0475, 77.6210], ["Electronic City", 12.8452, 77.6602],
+    ["Silk Board Junction", 12.9177, 77.6238], ["Hebbal Flyover", 13.0358, 77.5970], ["Yeshwanthpur", 13.0237, 77.5500],
+    ["Majestic (KSR Station)", 12.9779, 77.5713], ["Lalbagh", 12.9507, 77.5848], ["Cubbon Park", 12.9763, 77.5929],
+    ["Bangalore Palace", 12.9988, 77.5921], ["Jayanagar 4th Block", 12.9250, 77.5838], ["Kempegowda Airport", 13.1986, 77.7066],
+    ["Phoenix Marketcity", 12.9976, 77.6966], ["UB City", 12.9716, 77.5960]
+  ]
+}

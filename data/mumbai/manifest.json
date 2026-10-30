@@ -1,0 +1,153 @@
+{
+ "id": "mumbai",
+ "name": "Mumbai",
+ "sample": false,
+ "dataLabel": "SquareYards project listings, Housing.com area averages, Maharashtra IGR ready reckoner",
+ "bbox": [
+  72.77,
+  18.88,
+  73.22,
+  19.33
+ ],
+ "view": {
+  "center": [
+   72.875,
+   19.075
+  ],
+  "zoom": 10.75,
+  "mobileZoom": 10.1,
+  "pitch": 56,
+  "bearing": -12
+ },
+ "defaultUnit": "ft",
+ "guidance": {
+  "label": "Ready reckoner rate",
+  "source": "Maharashtra IGR (ASR)"
+ },
+ "credits": [
+  "Prices: SquareYards project pages and Housing.com price trends, collected 29 Oct 2026 (batch 1); ready reckoner: Maharashtra IGR",
+  "Boundaries: BMC wards (DataMeet, CC BY-SA 2.5 IN); Navi Mumbai, Thane, Mira-Bhayandar outlines \u00a9 OpenStreetMap contributors (ODbL)"
+ ],
+ "pinsFrom": 13.9,
+ "societies": true,
+ "asOf": "2026-10-29",
+ "builtAt": "2026-10-29 18:06 UTC",
+ "types": [
+  {
+   "id": "apartment",
+   "name": "Apartment",
+   "index": 0,
+   "sale": 4769,
+   "rent": 0,
+   "sizeMin": 300,
+   "sizeMax": 3050
+  },
+  {
+   "id": "plot",
+   "name": "Plot",
+   "land": true,
+   "index": 1,
+   "sale": 2,
+   "rent": 0,
+   "sizeMin": 1200,
+   "sizeMax": 3000
+  }
+ ],
+ "bhk": [
+  {
+   "id": "1RK",
+   "n": 40
+  },
+  {
+   "id": "1BHK",
+   "n": 914
+  },
+  {
+   "id": "2BHK",
+   "n": 1806
+  },
+  {
+   "id": "3BHK",
+   "n": 1442
+  },
+  {
+   "id": "4BHK",
+   "n": 485
+  },
+  {
+   "id": "5BHK",
+   "n": 77
+  },
+  {
+   "id": "6BHK",
+   "n": 5
+  }
+ ],
+ "levels": [
+  {
+   "key": "region",
+   "name": "Region",
+   "plural": "regions",
+   "kind": "polygon",
+   "from": 0,
+   "fit": 10.6,
+   "count": 7
+  },
+  {
+   "key": "ward",
+   "name": "Ward",
+   "plural": "wards",
+   "kind": "polygon",
+   "from": 11.0,
+   "fit": 14,
+   "colorScale": true,
+   "count": 28
+  },
+  {
+   "key": "area",
+   "name": "Area",
+   "plural": "areas",
+   "kind": "point",
+   "from": 12.4,
+   "to": 15.0,
+   "count": 76
+  }
+ ],
+ "heights": "heights/index.json",
+ "report": {
+  "files": [
+   "mumbai_master_batch1_snapshot.csv"
+  ],
+  "rowsRead": 10746,
+  "pointsUsed": 4771,
+  "sale": 4771,
+  "rent": 0,
+  "skipped": {
+   "no price or rent": 3000,
+   "society summary (its units are already counted)": 2886,
+   "outlier (typo or wrong unit)": 18,
+   "duplicate": 10
+  },
+  "governmentRates": 22,
+  "portalReferences": 39,
+  "societySummariesUsed": 0,
+  "societies": 1351,
+  "areas": 76,
+  "wardMismatches": {
+   "K/East -> location is in K/West": 90,
+   "S -> location is in N": 55,
+   "G/South -> location is in E": 54,
+   "C -> location is in D": 53,
+   "R/Central -> location is in R/North": 52,
+   "T -> location is in S": 42,
+   "G/South -> location is in G/North": 31,
+   "F/North -> location is in F/South": 30,
+   "F/North -> location is in G/North": 27,
+   "S -> location is in L": 21
+  },
+  "outside": {
+   "region": 24,
+   "ward": 24
+  }
+ }
+}

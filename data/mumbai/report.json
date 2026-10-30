@@ -1,0 +1,36 @@
+{
+ "files": [
+  "mumbai_master_batch1_snapshot.csv"
+ ],
+ "rowsRead": 10746,
+ "pointsUsed": 4771,
+ "sale": 4771,
+ "rent": 0,
+ "skipped": {
+  "no price or rent": 3000,
+  "society summary (its units are already counted)": 2886,
+  "outlier (typo or wrong unit)": 18,
+  "duplicate": 10
+ },
+ "governmentRates": 22,
+ "portalReferences": 39,
+ "societySummariesUsed": 0,
+ "societies": 1351,
+ "areas": 76,
+ "wardMismatches": {
+  "K/East -> location is in K/West": 90,
+  "S -> location is in N": 55,
+  "G/South -> location is in E": 54,
+  "C -> location is in D": 53,
+  "R/Central -> location is in R/North": 52,
+  "T -> location is in S": 42,
+  "G/South -> location is in G/North": 31,
+  "F/North -> location is in F/South": 30,
+  "F/North -> location is in G/North": 27,
+  "S -> location is in L": 21
+ },
+ "outside": {
+  "region": 24,
+  "ward": 24
+ }
+}
