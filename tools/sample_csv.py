@@ -2,9 +2,8 @@
 
   python tools/sample_csv.py bengaluru|delhi
 
-Output: cities/<city>/raw/<city>_sample.csv with exactly the same columns as
-mumbai_master_batch1_snapshot.csv, so it goes through tools/ingest.py like real
-data. Every price here is invented. When the real file arrives, delete the sample
+Output: cities/<city>/raw/<city>_sample.csv with exactly the same columns as the real
+masters, so it goes through tools/ingest.py like real data. Every price here is invented. When the real file arrives, delete the sample
 file from raw/ and put the real one there.
 
 To show the cleaning step working, the sample includes the problems real feeds

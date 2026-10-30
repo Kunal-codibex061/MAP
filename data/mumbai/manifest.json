@@ -34,7 +34,7 @@
  "pinSpread": false,
  "coordNote": "Most Mumbai project rows have society-level coordinates; area averages are locality centroids. Rows without usable coordinates are excluded.",
  "asOf": "2026-10-29",
- "builtAt": "2026-10-30 06:11 UTC",
+ "builtAt": "2026-10-30 06:32 UTC",
  "types": [
   {
    "id": "apartment",
@@ -153,6 +153,7 @@
    "G/South -> location is in G/North": 46,
    "F/North -> location is in F/South": 43
   },
+  "wardMismatchesTotal": 1164,
   "outside": {
    "region": 1233,
    "ward": 1233

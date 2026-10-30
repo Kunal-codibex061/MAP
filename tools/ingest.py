@@ -6,9 +6,9 @@ Reads every CSV in cities/<city>/raw/ (all batches are merged), cleans the rows 
 writes data/<city>/. Prints a report of what was used and what was skipped, and why.
 Needs only Python 3, nothing to install.
 
-CSV format: the columns of mumbai_master_batch1_snapshot.csv. Column names are matched
-loosely (see ALIASES), so a future file with e.g. "ward" instead of "bmc_ward" still works,
-and missing optional columns are fine. Required per data row: coordinates (lat/lon), a
+CSV format: the columns of the Mumbai v2 / Bengaluru masters. Column names are matched
+loosely (see ALIASES), so a file with e.g. "ward" instead of "bmc_ward" or "society_name"
+instead of "society_or_layout" still works, and missing optional columns are fine. Required per data row: coordinates (lat/lon), a
 property type, and a price (price_per_sqft, or total price + size) or a monthly rent + size.
 
 How rows are used
@@ -120,8 +120,10 @@ def iso_date(s):
 
 
 def norm_bhk(s):
-    """Collapse the 30+ BHK spellings in the feeds to '2BHK', '3BHK', '1RK'."""
+    """Collapse the 30+ BHK spellings in the feeds to '2BHK', '3BHK', '1RK'.
+    Multi-configuration strings such as '2,3' keep the first number (lossy)."""
     v = norm(s).upper().replace(" ", "")
+    v = v.replace("\\U003E", ">").replace("&GT;", ">")
     if not v or v in {"APARTMENT", "FLAT", "PLOT"}:
         return ""
     if v in {"STUDIO", "1RK"}:
@@ -577,7 +579,7 @@ def main(city_id):
         "societySummariesUsed": rep["society_summaries_used"], "societies": priced_socs, "societiesListed": len(soc_list),
         "areas": len(area_list), "corruptCoordinates": sum(v for k, v in skipped.items() if k.startswith("corrupt coordinates")),
         "rowsWithoutCoordinates": skipped.get("no coordinates", 0),
-        "wardMismatches": dict(mismatches.most_common(10)),
+        "wardMismatches": dict(mismatches.most_common(10)), "wardMismatchesTotal": sum(mismatches.values()),
         "outside": {lv["key"]: rep[f"outside_{lv['key']}"] for lv in poly_levels},
     }
     heights = (out / "heights" / "index.json").exists()
