@@ -2,9 +2,9 @@
   "id": "mumbai",
   "name": "Mumbai",
   "sample": false,
-  "dataLabel": "SquareYards project listings, Housing.com area averages, Maharashtra IGR ready reckoner",
-  "bbox": [72.77, 18.88, 73.22, 19.33],
-  "view": { "center": [72.875, 19.075], "zoom": 10.75, "mobileZoom": 10.1, "pitch": 56, "bearing": -12 },
+  "dataLabel": "SquareYards, Magicbricks, NoBroker and Housing.com listings, Maharashtra IGR ready reckoner",
+  "bbox": [72.70, 18.80, 73.40, 19.50],
+  "view": { "center": [72.93, 19.08], "zoom": 10.70, "mobileZoom": 10.05, "pitch": 56, "bearing": -12 },
   "defaultUnit": "ft",
   "guidance": { "label": "Ready reckoner rate", "source": "Maharashtra IGR (ASR)" },
   "types": [
@@ -18,8 +18,10 @@
   ],
   "societies": true,
   "pinsFrom": 13.9,
+  "surfaceStep": 0.0032,
+  "coordNote": "Most Mumbai project rows have society-level coordinates; area averages are locality centroids. Rows without usable coordinates are excluded.",
   "credits": [
-    "Prices: SquareYards project pages and Housing.com price trends, collected 29 Oct 2026 (batch 1); ready reckoner: Maharashtra IGR",
+    "Prices: SquareYards, Magicbricks, NoBroker and Housing.com listings, collected 29 Oct 2026 (v2, batches 1–4); ready reckoner: Maharashtra IGR",
     "Boundaries: BMC wards (DataMeet, CC BY-SA 2.5 IN); Navi Mumbai, Thane, Mira-Bhayandar outlines © OpenStreetMap contributors (ODbL)"
   ],
   "landmarks": [

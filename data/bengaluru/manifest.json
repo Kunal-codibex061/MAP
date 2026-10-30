@@ -1,87 +1,86 @@
 {
  "id": "bengaluru",
  "name": "Bengaluru",
- "sample": true,
- "dataLabel": "Sample listings, registered deals and broker inputs",
+ "sample": false,
+ "dataLabel": "SquareYards and Magicbricks project listings, Housing.com area averages, Karnataka IGR guidance values",
  "bbox": [
-  77.4,
-  12.8,
-  77.85,
-  13.2
+  77.27,
+  12.55,
+  77.87,
+  13.43
  ],
  "view": {
   "center": [
-   77.612,
-   12.962
+   77.58,
+   12.98
   ],
-  "zoom": 11.55,
-  "mobileZoom": 11.05,
+  "zoom": 10.55,
+  "mobileZoom": 10.0,
   "pitch": 56,
   "bearing": -18
  },
  "defaultUnit": "yd",
  "guidance": {
   "label": "Guidance value",
-  "source": "Kaveri format (sample)"
+  "source": "Karnataka IGR, Gazette 30 Sep 2023"
  },
  "credits": [
+  "Prices: SquareYards project pages and Magicbricks society pages, Housing.com price trends, Karnataka IGR guidance values (Gazette 30 Sep 2023), collected 29 Oct 2026",
   "Boundaries: GBA corporations and zones 2025 (OpenCity, public domain), BBMP wards 2022 (DataMeet, CC BY-SA 2.5 IN)",
   "Localities: \u00a9 OpenStreetMap contributors (ODbL)"
  ],
  "pinsFrom": 14.6,
- "societies": false,
- "asOf": "2026-10-26",
- "builtAt": "2026-10-29 18:05 UTC",
+ "societies": true,
+ "surfaceStep": 0.0033,
+ "pinSpread": true,
+ "coordNote": "Most Bengaluru rows are located at their locality or sub-locality centroid; only about 4,400 rows have society-level coordinates, so some society pins are approximate.",
+ "asOf": "2026-10-29",
+ "builtAt": "2026-10-30 06:32 UTC",
  "types": [
+  {
+   "id": "apartment",
+   "name": "Apartment",
+   "index": 0,
+   "sale": 14721,
+   "rent": 0,
+   "sizeMin": 600,
+   "sizeMax": 4400
+  },
   {
    "id": "plot",
    "name": "Plot",
    "land": true,
-   "index": 0,
-   "sale": 2833,
-   "rent": 0,
-   "sizeMin": 600,
-   "sizeMax": 4000
-  },
-  {
-   "id": "apartment",
-   "name": "Apartment",
    "index": 1,
-   "sale": 2072,
-   "rent": 1398,
-   "sizeMin": 650,
-   "sizeMax": 3200
-  },
-  {
-   "id": "floor",
-   "name": "Builder floor",
-   "index": 2,
-   "sale": 1962,
-   "rent": 1304,
-   "sizeMin": 1200,
-   "sizeMax": 4500
+   "sale": 1037,
+   "rent": 0,
+   "sizeMin": 800,
+   "sizeMax": 4850
   }
  ],
  "bhk": [
   {
+   "id": "1RK",
+   "n": 32
+  },
+  {
    "id": "1BHK",
-   "n": 395
+   "n": 731
   },
   {
    "id": "2BHK",
-   "n": 374
+   "n": 5660
   },
   {
    "id": "3BHK",
-   "n": 2087
+   "n": 6715
   },
   {
    "id": "4BHK",
-   "n": 1866
+   "n": 1421
   },
   {
    "id": "5BHK",
-   "n": 2014
+   "n": 114
   }
  ],
  "levels": [
@@ -120,32 +119,39 @@
    "kind": "point",
    "from": 12.9,
    "to": 15.6,
-   "count": 270
+   "count": 1044
   }
  ],
  "heights": "heights/index.json",
  "report": {
   "files": [
-   "bengaluru_sample.csv"
+   "bengaluru_master_FINAL_combined.csv"
   ],
-  "rowsRead": 10859,
-  "pointsUsed": 9569,
-  "sale": 6867,
-  "rent": 2702,
+  "rowsRead": 49792,
+  "pointsUsed": 15758,
+  "sale": 15758,
+  "rent": 0,
   "skipped": {
-   "duplicate": 665,
-   "outlier (typo or wrong unit)": 85
+   "no price or rent": 22330,
+   "society summary (its units are already counted)": 6889,
+   "duplicate": 3888,
+   "outlier (typo or wrong unit)": 197,
+   "area row without a usable rate": 1
   },
-  "governmentRates": 540,
-  "portalReferences": 0,
-  "societySummariesUsed": 0,
-  "societies": 0,
-  "areas": 270,
+  "governmentRates": 285,
+  "portalReferences": 444,
+  "societySummariesUsed": 2257,
+  "societies": 5698,
+  "societiesListed": 18718,
+  "areas": 1044,
+  "corruptCoordinates": 0,
+  "rowsWithoutCoordinates": 0,
   "wardMismatches": {},
+  "wardMismatchesTotal": 0,
   "outside": {
-   "corporation": 0,
-   "zone": 0,
-   "ward": 0
+   "corporation": 2784,
+   "zone": 2784,
+   "ward": 2812
   }
  }
 }
