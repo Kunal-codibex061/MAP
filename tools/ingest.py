@@ -36,7 +36,7 @@ ALIASES = {
     "ward": ["bmc_ward", "ward", "mcd_ward", "bbmp_ward", "ward_name"],
     "area": ["area", "locality", "colony"],
     "sub_area": ["sub_area", "sublocality", "sub_locality"],
-    "society": ["society_or_layout", "society", "project", "layout", "building"],
+    "society": ["society_or_layout", "society_name", "society", "project", "layout", "building"],
     "row_level": ["row_level", "level", "row_type"],
     "type": ["property_type", "type"],
     "source": ["source"],
@@ -56,6 +56,7 @@ ALIASES = {
     "notes": ["notes", "note"],
     "lat": ["lat", "latitude"],
     "lon": ["lon", "lng", "long", "longitude"],
+    "precision": ["geo_precision"],
 }
 TYPE_WORDS = {
     "apartment": "apartment", "apartments": "apartment", "flat": "apartment", "flats": "apartment",
@@ -79,6 +80,57 @@ def num(s):
 
 def norm(s):
     return re.sub(r"\s+", " ", (s or "").strip().lower())
+
+
+MONTHS = {m.lower(): i for i, m in enumerate(
+    ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], 1)}
+
+
+def iso_date(s):
+    """Normalize the date formats the feeds use. Period start, so annual/quarterly
+    values do not look newer than they are."""
+    s = (s or "").strip()
+    if not s:
+        return ""
+    m = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", s)
+    if m:
+        return s
+    m = re.match(r"^(\d{4})-(\d{2})$", s)
+    if m:
+        return f"{m.group(1)}-{m.group(2)}-01"
+    m = re.match(r"^(\d{4})$", s)
+    if m:
+        return f"{s}-01-01"
+    m = re.match(r"^(\d{1,2})\s+([A-Za-z]{3,9})\s+(\d{4})$", s)
+    if m:
+        mon = MONTHS.get(m.group(2)[:3].lower())
+        if mon:
+            return f"{m.group(3)}-{mon:02d}-01"
+    m = re.match(r"^([A-Za-z]{3,9})\s*[-–]\s*([A-Za-z]{3,9})\s+(\d{4})$", s)
+    if m:
+        mon = MONTHS.get(m.group(1)[:3].lower())
+        if mon:
+            return f"{m.group(3)}-{mon:02d}-01"
+    m = re.match(r"^([A-Za-z]{3,9})[-\s]+(\d{4})$", s)
+    if m:
+        mon = MONTHS.get(m.group(1)[:3].lower())
+        if mon:
+            return f"{m.group(2)}-{mon:02d}-01"
+    return ""
+
+
+def norm_bhk(s):
+    """Collapse the 30+ BHK spellings in the feeds to '2BHK', '3BHK', '1RK'."""
+    v = norm(s).upper().replace(" ", "")
+    if not v or v in {"APARTMENT", "FLAT", "PLOT"}:
+        return ""
+    if v in {"STUDIO", "1RK"}:
+        return "1RK"
+    m = re.search(r"\d+", v)
+    if not m:
+        return ""
+    n = int(m.group())
+    return f"{n}BHK" if 0 < n <= 20 else ""
 
 
 def code_norm(s):
@@ -193,6 +245,7 @@ def main(city_id):
     skipped = Counter()
     units, summaries, gov_rows, ref_rows = [], [], [], []
     no_price_by_soc = Counter()
+    soc_geo = {}          # every society with coordinates, priced or not
     sources, urls, bhks = [], [], []
 
     def intern(lst, v):
@@ -221,9 +274,23 @@ def main(city_id):
                     "file": path.name, "type": ptype, "lat": lat, "lon": lon,
                     "area": g("area"), "sub_area": g("sub_area"), "society": g("society"),
                     "ward_csv": g("ward"), "source": g("source") or "Unknown source",
-                    "bhk": g("bhk").upper().replace(" ", ""), "url": g("url"), "date": g("as_of")[:10],
-                    "notes": g("notes"), "level": level,
+                    "bhk": norm_bhk(g("bhk")), "url": g("url"), "date": iso_date(g("as_of")),
+                    "notes": g("notes"), "level": level, "prec": norm(g("precision")),
                 }
+                if lat is not None and lon is not None:
+                    if abs(lat) > 90 or abs(lon) > 180:
+                        skipped["corrupt coordinates (out of range)"] += 1
+                        continue
+                    if abs(lat - lon) < 1e-9:
+                        skipped["corrupt coordinates (lat = lon)"] += 1
+                        continue
+                    if not (W <= lon <= E and S <= lat <= N):
+                        if W <= lat <= E and S <= lon <= N:
+                            skipped["corrupt coordinates (swapped)"] += 1
+                            continue
+                        if not (W - 1 <= lon <= E + 1 and S - 1 <= lat <= N + 1):
+                            skipped["corrupt coordinates (implausible for city)"] += 1
+                            continue
                 if level in ("area", "sub_area", "locality"):
                     gov = num(g("gov_sqm"))
                     is_gov = gov is not None or any(w in rec["source"].lower() for w in GOV_WORDS)
@@ -243,6 +310,18 @@ def main(city_id):
                 if not (W <= lon <= E and S <= lat <= N):
                     skipped["coordinates outside the city"] += 1
                     continue
+                if rec["society"]:
+                    key = (norm(rec["society"]), norm(rec["area"]))
+                    g0 = soc_geo.get(key)
+                    if g0 is None:
+                        g0 = soc_geo[key] = {"names": Counter(), "lats": [], "lons": [], "url": "", "prec": False}
+                    g0["names"][rec["society"].strip()] += 1
+                    g0["lats"].append(lat)
+                    g0["lons"].append(lon)
+                    if rec["url"] and not g0["url"]:
+                        g0["url"] = rec["url"]
+                    if rec["prec"] in ("society", "exact"):
+                        g0["prec"] = True
                 size = mid(num(g("size_min")), num(g("size_max")))
                 price = mid(num(g("price_min")), num(g("price_max")))
                 rent = mid(num(g("rent_min")), num(g("rent_max")))
@@ -387,13 +466,15 @@ def main(city_id):
             votes = Counter(u[lv["key"]] for u in clean if u["area_i"] == a["id"] and u[lv["key"]] >= 0)
             a["parents"][lv["key"]] = votes.most_common(1)[0][0] if votes else P[lv["key"]].find(a["lon"], a["lat"])
 
-    # Societies
+    # Societies. Priced ones get pins; the rest are listed for search only.
     soc_list, soc_idx = [], {}
+    priced_socs = 0
     if city.get("societies"):
         groups = defaultdict(list)
         for u in clean:
             if u["society"]:
                 groups[(norm(u["society"]), norm(u["area"]))].append(u)
+        priced_socs = len(groups)
         for key, items in sorted(groups.items()):
             soc_idx[key] = len(soc_list)
             soc_list.append({
@@ -401,6 +482,18 @@ def main(city_id):
                 "lon": r5(median([i["lon"] for i in items])), "lat": r5(median([i["lat"] for i in items])),
                 "area": items[0]["area_i"], "url": Counter(i["url"] for i in items if i["url"]).most_common(1)[0][0] if any(i["url"] for i in items) else "",
                 "npr": no_price_by_soc.get(key, 0),
+                "p": 1 if any(i["prec"] in ("society", "exact") for i in items) else 0,
+            })
+        for key, g0 in sorted(soc_geo.items()):
+            if key in soc_idx:
+                continue
+            soc_idx[key] = len(soc_list)
+            soc_list.append({
+                "id": len(soc_list), "name": g0["names"].most_common(1)[0][0],
+                "lon": r5(median(g0["lons"])), "lat": r5(median(g0["lats"])),
+                "area": area_idx.get(key[1], -1), "url": g0["url"],
+                "npr": no_price_by_soc.get(key, 0),
+                "p": 1 if g0["prec"] else 0,
             })
 
     # ---------- write ----------
@@ -474,13 +567,16 @@ def main(city_id):
         types_out.append({**t, "index": ti, "sale": counts[0], "rent": counts[1],
                           "sizeMin": int(lo // 50 * 50), "sizeMax": int(math.ceil(hi / 50) * 50)})
     bhk_counts = Counter(bhks[r[8]] for r in rows if r[8] >= 0)
+    bhk_counts = Counter({b: n for b, n in bhk_counts.items() if n >= 20})
     order = lambda b: (0, 0) if b == "1RK" else (1, int(re.sub(r"\D", "", b) or 9))  # noqa: E731
     dates = sorted(r[6] for r in rows if r[6])
     report = {
         "files": [f.name for f in files], "rowsRead": rep["rows_read"],
         "pointsUsed": len(rows), "sale": sum(1 for r in rows if r[3] == 0), "rent": sum(1 for r in rows if r[3] == 1),
         "skipped": dict(skipped.most_common()), "governmentRates": len(gov_rows), "portalReferences": len(ref_rows),
-        "societySummariesUsed": rep["society_summaries_used"], "societies": len(soc_list), "areas": len(area_list),
+        "societySummariesUsed": rep["society_summaries_used"], "societies": priced_socs, "societiesListed": len(soc_list),
+        "areas": len(area_list), "corruptCoordinates": sum(v for k, v in skipped.items() if k.startswith("corrupt coordinates")),
+        "rowsWithoutCoordinates": skipped.get("no coordinates", 0),
         "wardMismatches": dict(mismatches.most_common(10)),
         "outside": {lv["key"]: rep[f"outside_{lv['key']}"] for lv in poly_levels},
     }
@@ -490,6 +586,8 @@ def main(city_id):
         "bbox": city["bbox"], "view": city["view"], "defaultUnit": city.get("defaultUnit", "yd"),
         "guidance": city.get("guidance", {"label": "Government rate"}), "credits": city.get("credits", []),
         "pinsFrom": city.get("pinsFrom", 14.6), "societies": bool(city.get("societies")),
+        "surfaceStep": city.get("surfaceStep", 0.002), "pinSpread": bool(city.get("pinSpread", False)),
+        "coordNote": city.get("coordNote", ""),
         "asOf": dates[-1] if dates else "", "builtAt": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         "types": types_out,
         "bhk": [{"id": b, "n": n} for b, n in sorted(bhk_counts.items(), key=lambda kv: order(kv[0]))] if len(bhk_counts) > 1 else None,

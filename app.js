@@ -223,6 +223,29 @@
     });
     return best;
   }
+
+  // Many societies share a locality centroid. Fan the duplicates on a golden-angle spiral
+  // for display only, so each pin can be clicked; s.lon/s.lat stay exact for search and fly-to.
+  function spreadSocietyPins() {
+    if (!M.societies || !M.pinSpread) return;
+    A.soc.forEach((s) => { s.px = s.lon; s.py = s.lat; });
+    const groups = new Map();
+    A.soc.forEach((s, i) => {
+      const k = s.lon + ',' + s.lat;
+      if (!groups.has(k)) groups.set(k, []);
+      groups.get(k).push(i);
+    });
+    groups.forEach((ids) => {
+      ids.forEach((id, k) => {
+        if (!k) return;
+        const s = A.soc[id];
+        const rKm = Math.min(0.3, 0.03 * Math.sqrt(k));
+        const a = k * 2.399963229728653;
+        s.px = s.lon + (rKm * Math.cos(a)) / (111.32 * Math.cos((s.lat * Math.PI) / 180));
+        s.py = s.lat + (rKm * Math.sin(a)) / 110.57;
+      });
+    });
+  }
   const switchZoom = (i) => POLY[i].from;
   function levelAtZoom(z) {
     let k = 0;
@@ -406,6 +429,7 @@
           ? ['interpolate', ['linear'], ['zoom'], 14, ['min', 9, ['+', 5, ['*', 0.6, ['get', 'n']]]], 17, ['min', 13, ['+', 7, ['*', 0.8, ['get', 'n']]]]]
           : ['interpolate', ['linear'], ['zoom'], 14, 5, 17, 8],
         'circle-stroke-width': 2, 'circle-stroke-color': '#ffffff',
+        'circle-opacity': ['case', ['==', ['get', 'p'], 0], 0.7, 1],
       } });
     map.addLayer({ id: 'pt-label', type: 'symbol', source: 'pts', minzoom: pinFrom + 0.8, filter: ['!', ['has', 'point_count']],
       layout: {
@@ -482,8 +506,8 @@
       pinFeatures = A.soc.map((s, i) => {
         const st = stats.soc[i];
         if (!st.n) return null;
-        return { type: 'Feature', geometry: { type: 'Point', coordinates: [s.lon, s.lat] },
-          properties: { kind: 'soc', i, r: st.median, n: st.n, name: s.name, c: thresholds.length ? PALETTE[bucket(st.median)] : PALETTE[4], l: inrShort(conv(st.median)) } };
+        return { type: 'Feature', geometry: { type: 'Point', coordinates: [s.px != null ? s.px : s.lon, s.py != null ? s.py : s.lat] },
+          properties: { kind: 'soc', i, r: st.median, n: st.n, p: s.p || 0, name: s.name, c: thresholds.length ? PALETTE[bucket(st.median)] : PALETTE[4], l: inrShort(conv(st.median)) } };
       }).filter(Boolean);
     } else {
       pinFeatures = filtered.map((r) => ({
@@ -528,13 +552,14 @@
   }
 
   // ---------- Local price surface ----------
-  // A ~220 m grid; each cell blends data points within 1 km (Gaussian weights, in log space).
-  // Cells with fewer than SURF_MIN points nearby stay empty and their buildings stay grey.
+  // A ~220–350 m grid (city-configurable); each cell blends data points within 1 km
+  // (Gaussian weights, in log space). Cells with fewer than SURF_MIN points nearby stay
+  // empty and their buildings stay grey.
   let SURF = null;
   const SURF_R = 1.0, SURF_SIGMA = 0.45, SURF_MIN = 4;
   let surf, surfVal, surfN, surfVer = 0;
   function initSurface() {
-    const step = 0.002;
+    const step = M.surfaceStep || 0.002;
     SURF = { west: M.bbox[0], north: M.bbox[3], step, cols: Math.ceil((M.bbox[2] - M.bbox[0]) / step), rows: Math.ceil((M.bbox[3] - M.bbox[1]) / step) };
     surf = new Float32Array(SURF.cols * SURF.rows).fill(-1);
     surfVal = new Float32Array(SURF.cols * SURF.rows);
@@ -573,7 +598,7 @@
               const ex = (r.lon - lon) * kx, ey = (r.lat - lat) * ky, d2 = ex * ex + ey * ey;
               if (d2 > SURF_R * SURF_R) continue;
               const w = Math.exp(-d2 / two);
-              ws += w; wl += w * Math.log(r.rate); n++;
+              ws += w; wl += w * r.lr; n++;
             }
           }
         }
@@ -1002,8 +1027,10 @@
       <div class="p-title">${esc(so.name)}</div>
       ${parents.length ? `<div class="p-parents">${parents.map(([l, i]) => `<button class="parent-chip" data-area="${l}:${i}">${esc(levelCfg(l).name)}: ${esc(areaName(l, i))}</button>`).join('')}</div>` : ''}
       <div class="p-context">${filterChips()}</div>`;
+    if (so.p === 0) html += `<div class="gv-note">Location is a locality centroid, not the exact building.</div>`;
     if (!s.n) {
-      html += `<div class="p-empty">No configurations here match these filters.</div>`;
+      const noPrice = !rowsBy.soc[id].length;
+      html += `<div class="p-empty">${noPrice ? 'No price data for this society yet. It is listed in the data, but no configuration has a usable price.' : 'No configurations here match these filters.'}</div>`;
     } else {
       const color = colorOf(s);
       html += `
@@ -1447,21 +1474,22 @@
     $('about-lead').textContent = `What property costs across ${M.name}, from ${M.levels[0].plural} down to individual ${M.societies ? 'societies' : 'streets'}. Built for brokers, developers, banks, valuers and investors.`;
     $('about-warn').innerHTML = M.sample
       ? `All prices for ${esc(M.name)} are <b>sample data</b>, generated in the client's data format to show how the product works. Boundaries and place names are real.`
-      : `Prices for ${esc(M.name)} are <b>real data, batch 1</b>: ${esc(M.dataLabel)}, as of ${fmtDate(M.asOf)}. Coverage is partial, and listings are asking prices, not registered deal values.`;
+      : `Prices for ${esc(M.name)} are <b>real data</b>: ${esc(M.dataLabel)}, as of ${fmtDate(M.asOf)}. Coverage is partial, and listings are asking prices, not registered deal values.${M.coordNote ? `<br>${esc(M.coordNote)}` : ''}`;
     $('howto-zoom').innerHTML = `<b>Zoom to go deeper.</b> ${esc(lvls)} → individual ${M.societies ? 'societies' : 'prices'}.`;
     $('howto-click').innerHTML = `<b>Click any area${M.societies ? ' or society' : ''}</b> for its median price, range, ${esc(M.guidance.label.toLowerCase())} gap and latest data points.`;
     const typeNames = M.types.map((t) => t.name.toLowerCase());
     $('howto-filters').innerHTML = `<b>Switch the view</b> with the filters: ${esc(typeNames.join(', '))}${M.types.some((t) => t.rent) ? ', sale or rent' : ''}${M.bhk ? ', BHK' : ''} and size.`;
     const skipped = r.skipped || {};
     const sum = (pred) => Object.entries(skipped).filter(([k]) => pred(k)).reduce((a, [, v]) => a + v, 0);
-    const noPrice = sum((k) => k.includes('no price')) + sum((k) => k.includes('society summary'));
     const bad = sum((k) => k.includes('duplicate') || k.includes('outlier'));
-    const other = Object.values(skipped).reduce((a, v) => a + v, 0) - noPrice - bad;
+    // Everything that is neither a point nor a duplicate/outlier: government/reference
+    // area rows, summaries already counted, and rows without a price or usable coordinates.
+    const usedElsewhere = Math.max(0, r.rowsRead - r.pointsUsed - bad);
     $('about-data').innerHTML = `
       <div class="pipe">
         <div class="pipe-step"><b>${nf.format(r.rowsRead)}</b><span>rows in ${plural(r.files.length, 'file')}</span></div>
         <div class="pipe-arrow">→</div>
-        <div class="pipe-step minus"><b>−${nf.format(noPrice + other)}</b><span>${M.societies ? 'summaries already counted, rows without a price' : 'rows without a usable price'}${r.governmentRates ? `, ${nf.format(r.governmentRates)} ${esc(M.guidance.label.toLowerCase())} rows used separately` : ''}</span></div>
+        <div class="pipe-step minus"><b>−${nf.format(usedElsewhere)}</b><span>${r.governmentRates ? `${nf.format(r.governmentRates)} ${esc(M.guidance.label.toLowerCase())} rows used separately, ` : ''}summaries already counted, rows without a price or usable coordinates</span></div>
         <div class="pipe-arrow">→</div>
         <div class="pipe-step minus"><b>−${nf.format(bad)}</b><span>duplicates and outliers (same home twice, typos)</span></div>
         <div class="pipe-arrow">→</div>
@@ -1475,6 +1503,8 @@
       `Areas with <b>${lowText()}</b> are greyed out as low confidence.`,
       'Colours use <b>10 percentile steps</b>, so both cheap and premium areas show contrast.',
       `Up close, each <b>building is coloured by prices within about 1 km</b>${M.heights ? ' and stands at its <b>real height</b> from satellite data' : ''}.`,
+      M.pinSpread ? 'Where several societies share one locality coordinate, their pins are <b>spread slightly</b> so each can be clicked.' : '',
+      M.societies && r.societiesListed > r.societies ? `${nf.format(r.societiesListed - r.societies)} more societies are listed without prices and can be found in search.` : '',
       `Every number shows its <b>source and date</b>. New data files are added with one command (see README).`,
     ].filter(Boolean);
     $('about-rules').innerHTML = rules.map((x) => `<li>${x}</li>`).join('');
@@ -1709,7 +1739,7 @@
     pts = res[POLY.length];
     places = res[POLY.length + 1];
     if (PT) A.area = res[POLY.length + 2];
-    if (M.societies) A.soc = res[POLY.length + 3];
+    if (M.societies) { A.soc = res[POLY.length + 3]; spreadSocietyPins(); }
     // Rows as objects, reading columns by name.
     const F = {};
     pts.fields.forEach((f, i) => { F[f] = i; });
@@ -1717,7 +1747,7 @@
     rows = pts.rows.map((r, idx) => {
       const lv = {};
       lvKeys.forEach((k) => { lv[k] = r[F[k]]; });
-      return { idx, lon: r[F.lon], lat: r[F.lat], t: r[F.type], d: r[F.deal], size: r[F.size], rate: r[F.rate], date: r[F.date], src: r[F.src], bhk: r[F.bhk], soc: r[F.soc], url: r[F.url], lv };
+      return { idx, lon: r[F.lon], lat: r[F.lat], t: r[F.type], d: r[F.deal], size: r[F.size], rate: r[F.rate], lr: Math.log(r[F.rate]), date: r[F.date], src: r[F.src], bhk: r[F.bhk], soc: r[F.soc], url: r[F.url], lv };
     });
     Object.keys(A).forEach((k) => { rowsBy[k] = A[k].map(() => []); });
     rows.forEach((r) => {

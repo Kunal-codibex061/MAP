@@ -1,24 +1,30 @@
 {
  "files": [
-  "bengaluru_sample.csv"
+  "bengaluru_master_FINAL_combined.csv"
  ],
- "rowsRead": 10859,
- "pointsUsed": 9569,
- "sale": 6867,
- "rent": 2702,
+ "rowsRead": 49792,
+ "pointsUsed": 15758,
+ "sale": 15758,
+ "rent": 0,
  "skipped": {
-  "duplicate": 665,
-  "outlier (typo or wrong unit)": 85
+  "no price or rent": 22330,
+  "society summary (its units are already counted)": 6889,
+  "duplicate": 3888,
+  "outlier (typo or wrong unit)": 197,
+  "area row without a usable rate": 1
  },
- "governmentRates": 540,
- "portalReferences": 0,
- "societySummariesUsed": 0,
- "societies": 0,
- "areas": 270,
+ "governmentRates": 285,
+ "portalReferences": 444,
+ "societySummariesUsed": 2257,
+ "societies": 5698,
+ "societiesListed": 18718,
+ "areas": 1044,
+ "corruptCoordinates": 0,
+ "rowsWithoutCoordinates": 0,
  "wardMismatches": {},
  "outside": {
-  "corporation": 0,
-  "zone": 0,
-  "ward": 0
+  "corporation": 2784,
+  "zone": 2784,
+  "ward": 2812
  }
 }

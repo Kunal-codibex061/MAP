@@ -1,36 +1,45 @@
 {
  "files": [
-  "mumbai_master_batch1_snapshot.csv"
+  "mumbai_master_v2_final.csv"
  ],
- "rowsRead": 10746,
- "pointsUsed": 4771,
- "sale": 4771,
+ "rowsRead": 52167,
+ "pointsUsed": 13572,
+ "sale": 13572,
  "rent": 0,
  "skipped": {
-  "no price or rent": 3000,
-  "society summary (its units are already counted)": 2886,
-  "outlier (typo or wrong unit)": 18,
-  "duplicate": 10
+  "no price or rent": 25007,
+  "society summary (its units are already counted)": 5593,
+  "no coordinates": 5247,
+  "duplicate": 1513,
+  "outlier (typo or wrong unit)": 112,
+  "area without coordinates": 76,
+  "corrupt coordinates (lat = lon)": 6,
+  "coordinates outside the city": 2,
+  "corrupt coordinates (swapped)": 2,
+  "corrupt coordinates (implausible for city)": 1
  },
- "governmentRates": 22,
- "portalReferences": 39,
- "societySummariesUsed": 0,
- "societies": 1351,
- "areas": 76,
+ "governmentRates": 269,
+ "portalReferences": 843,
+ "societySummariesUsed": 718,
+ "societies": 7881,
+ "societiesListed": 25058,
+ "areas": 200,
+ "corruptCoordinates": 9,
+ "rowsWithoutCoordinates": 5247,
  "wardMismatches": {
-  "K/East -> location is in K/West": 90,
-  "S -> location is in N": 55,
+  "K/East -> location is in K/West": 164,
+  "R/Central -> location is in R/North": 132,
+  "C -> location is in D": 123,
+  "R/South -> location is in R/Central": 85,
+  "S -> location is in N": 64,
+  "T -> location is in S": 55,
   "G/South -> location is in E": 54,
-  "C -> location is in D": 53,
-  "R/Central -> location is in R/North": 52,
-  "T -> location is in S": 42,
-  "G/South -> location is in G/North": 31,
-  "F/North -> location is in F/South": 30,
-  "F/North -> location is in G/North": 27,
-  "S -> location is in L": 21
+  "S -> location is in L": 49,
+  "G/South -> location is in G/North": 46,
+  "F/North -> location is in F/South": 43
  },
  "outside": {
-  "region": 24,
-  "ward": 24
+  "region": 1233,
+  "ward": 1233
  }
 }
