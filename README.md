@@ -8,6 +8,9 @@ A map of what property costs, from city-wide areas down to individual streets an
 | **Bengaluru** | **Real**: SquareYards and Magicbricks project listings, Housing.com area averages, Karnataka IGR guidance values (Gazette 30 Sep 2023) | GBA corporation → Zone → Ward → Locality → Society |
 | **Delhi** | Sample (invented), until the real file arrives | District → Ward → Colony |
 
+The map draws 15,758 Bengaluru points (5,698 priced societies) and 13,572 Mumbai points
+(7,881 priced societies); another 13,020 and 17,177 societies are searchable without prices.
+
 Live: https://bengaluru-price-map.vercel.app (`/mumbai`, `/delhi`, `/bengaluru`). Locally: `?city=mumbai`.
 
 ## Adding or updating data (the normal workflow)
