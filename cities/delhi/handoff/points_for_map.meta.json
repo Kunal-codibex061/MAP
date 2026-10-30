@@ -1,0 +1,34 @@
+{
+  "note": "Converted from delhi_master_final_geo.csv to live /data/delhi/points.json schema. rate=₹/sqft sale. No invented prices/coords. Live Delhi fields are lon,lat,type,deal,size,rate,date,src,bhk,soc,url,district,ward,area (NOT Bengaluru's corporation/zone). types: plot=0, floor=1 (builder floor + independent house), apartment=2 (apartment + DDA flat). Circle-rate rows included when price_per_sqft present (already Rs/sqm→Rs/sqft ÷10.764 in master) or converted from circle_rate_per_sqm; src labeled 'Delhi circle rates'. size=0 when unknown. district/ward/area indices from live areas.json parents when locality matched.",
+  "builtOn": "2026-10-30",
+  "sourceFile": "delhi_master_final_geo.csv",
+  "bbox": [
+    76.83,
+    28.4,
+    77.35,
+    28.89
+  ],
+  "skipped": {
+    "no_rate": 3142,
+    "no_coords": 6323,
+    "oob": 0,
+    "rate_outlier": 0,
+    "rent_outlier": 0,
+    "bad_type": 0,
+    "lat_lon_swapped": 0,
+    "size_missing_set_0": 782,
+    "circle_converted_from_sqm": 303,
+    "circle_rate_included": 1673
+  },
+  "duplicatesRemoved": 242,
+  "pointsUsed": 2608,
+  "societies": 3247,
+  "societiesWithPrice": 137,
+  "liveAreasMatched": 2260,
+  "liveAreasTotal": 238,
+  "withSocietyId": 792,
+  "uniqueCoords": 254,
+  "societyPrecisionPoints": 4,
+  "areaCentroidPoints": 2554,
+  "stackingWarning": "Most priced rows share area-centroid coordinates (geo_precision=area). Only 4 points have society-level precision. Expect heavy pin stacking unless you filter to delhi_society_pins.csv or enable societies.json aggregation (manifest.societies=true)."
+}

@@ -62,7 +62,8 @@ TYPE_WORDS = {
     "apartment": "apartment", "apartments": "apartment", "flat": "apartment", "flats": "apartment",
     "plot": "plot", "land": "plot", "site": "plot", "residential plot": "plot",
     "builder floor": "floor", "builder_floor": "floor", "independent floor": "floor", "floor": "floor",
-    "villa": "house", "independent house": "house", "house": "house",
+    "dda flat": "apartment", "dda_flat": "apartment",
+    "villa": "house", "independent house": "floor", "house": "house",
 }
 UNIT_LEVELS = {"", "config", "unit", "listing", "transaction", "deal"}
 GOV_WORDS = ("ready reckoner", "circle rate", "guidance", "igr", "asr", "kaveri")
@@ -92,6 +93,8 @@ def iso_date(s):
     s = (s or "").strip()
     if not s:
         return ""
+    if s.lower().startswith("2014-revised"):
+        return "2014-01-01"
     m = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", s)
     if m:
         return s
@@ -272,11 +275,13 @@ def main(city_id):
                 level = norm(g("row_level"))
                 ptype = TYPE_WORDS.get(norm(g("type")))
                 lat, lon = num(g("lat")), num(g("lon"))
+                raw_url = g("url")
                 rec = {
                     "file": path.name, "type": ptype, "lat": lat, "lon": lon,
                     "area": g("area"), "sub_area": g("sub_area"), "society": g("society"),
                     "ward_csv": g("ward"), "source": g("source") or "Unknown source",
-                    "bhk": norm_bhk(g("bhk")), "url": g("url"), "date": iso_date(g("as_of")),
+                    "bhk": norm_bhk(g("bhk")), "url": raw_url if re.match(r"^https?://", raw_url) else "",
+                    "date": iso_date(g("as_of")),
                     "notes": g("notes"), "level": level, "prec": norm(g("precision")),
                 }
                 if lat is not None and lon is not None:
@@ -302,6 +307,10 @@ def main(city_id):
                         continue
                     rec["rate"] = rate
                     (gov_rows if is_gov else ref_rows).append(rec)
+                    continue
+                if "circle rate" in rec["source"].lower():
+                    # Official floor rates at listing level are guidance, not market prices.
+                    skipped["circle-rate row (official floor rate)"] += 1
                     continue
                 if not ptype or ptype not in type_ids:
                     skipped[f"property type not used for {city['name']} ({g('type') or 'blank'})"] += 1

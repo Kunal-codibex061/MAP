@@ -34,7 +34,7 @@
  "pinSpread": false,
  "coordNote": "Most Mumbai project rows have society-level coordinates; area averages are locality centroids. Rows without usable coordinates are excluded.",
  "asOf": "2026-10-29",
- "builtAt": "2026-10-30 06:32 UTC",
+ "builtAt": "2026-10-30 07:22 UTC",
  "types": [
   {
    "id": "apartment",

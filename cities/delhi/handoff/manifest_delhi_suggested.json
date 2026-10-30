@@ -1,0 +1,148 @@
+{
+  "id": "delhi",
+  "name": "Delhi",
+  "sample": false,
+  "dataLabel": "Portal listings, society pages and Delhi circle rates",
+  "bbox": [
+    76.83,
+    28.4,
+    77.35,
+    28.89
+  ],
+  "view": {
+    "center": [
+      77.16,
+      28.62
+    ],
+    "zoom": 10.35,
+    "mobileZoom": 9.7,
+    "pitch": 55,
+    "bearing": -10
+  },
+  "defaultUnit": "yd",
+  "guidance": {
+    "label": "Circle rate",
+    "source": "Delhi Revenue Dept colony categories A–H (converted Rs/sqm→Rs/sqft)"
+  },
+  "credits": [
+    "Boundaries: districts © OpenStreetMap contributors (ODbL); wards (DataMeet, CC BY-SA 2.5 IN; pre-2022 delimitation)",
+    "Colonies: © OpenStreetMap contributors (ODbL)"
+  ],
+  "pinsFrom": 14.6,
+  "societies": true,
+  "asOf": "2026-10-30",
+  "builtAt": "2026-10-30 (Asia/Calcutta)",
+  "types": [
+    {
+      "id": "plot",
+      "name": "Plot",
+      "land": true,
+      "index": 0,
+      "sale": 1651,
+      "rent": 0,
+      "sizeMin": 450,
+      "sizeMax": 4500
+    },
+    {
+      "id": "floor",
+      "name": "Builder floor",
+      "index": 1,
+      "sale": 91,
+      "rent": 0,
+      "sizeMin": 900,
+      "sizeMax": 3600
+    },
+    {
+      "id": "apartment",
+      "name": "Apartment",
+      "index": 2,
+      "sale": 866,
+      "rent": 0,
+      "sizeMin": 565,
+      "sizeMax": 8350
+    }
+  ],
+  "bhk": [
+    {
+      "id": "1BHK",
+      "n": 59
+    },
+    {
+      "id": "2BHK",
+      "n": 196
+    },
+    {
+      "id": "3BHK",
+      "n": 201
+    },
+    {
+      "id": "4BHK",
+      "n": 151
+    },
+    {
+      "id": "5BHK",
+      "n": 80
+    },
+    {
+      "id": "6BHK",
+      "n": 2
+    }
+  ],
+  "levels": [
+    {
+      "key": "district",
+      "name": "District",
+      "plural": "districts",
+      "kind": "polygon",
+      "from": 0,
+      "fit": 10.6,
+      "count": 13
+    },
+    {
+      "key": "ward",
+      "name": "Ward",
+      "plural": "wards",
+      "kind": "polygon",
+      "from": 10.9,
+      "fit": 14.5,
+      "colorScale": true,
+      "count": 290
+    },
+    {
+      "key": "area",
+      "name": "Colony",
+      "plural": "colonies",
+      "kind": "point",
+      "from": 12.9,
+      "to": 15.6,
+      "count": 238
+    }
+  ],
+  "heights": "heights/index.json",
+  "report": {
+    "files": [
+      "delhi_master_final_geo.csv"
+    ],
+    "rowsRead": 12315,
+    "pointsUsed": 2608,
+    "sale": 2608,
+    "rent": 0,
+    "skipped": {
+      "duplicate": 242,
+      "no_rate": 3142,
+      "no_coords": 6323,
+      "oob": 0,
+      "rate_outlier": 0
+    },
+    "governmentRates": 1673,
+    "portalReferences": 935,
+    "societySummariesUsed": 3247,
+    "societies": 3247,
+    "areas": 238,
+    "wardMismatches": {},
+    "outside": {
+      "district": 0,
+      "ward": 0
+    }
+  }
+}
