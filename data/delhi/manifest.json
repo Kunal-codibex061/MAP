@@ -1,8 +1,8 @@
 {
  "id": "delhi",
  "name": "Delhi",
- "sample": true,
- "dataLabel": "Sample listings, registered deals and broker inputs",
+ "sample": false,
+ "dataLabel": "SquareYards and Magicbricks project listings, Housing.com price trends, Delhi Revenue Department circle rates",
  "bbox": [
   76.83,
   28.4,
@@ -22,23 +22,36 @@
  "defaultUnit": "yd",
  "guidance": {
   "label": "Circle rate",
-  "source": "Delhi circle rates (sample)"
+  "source": "Delhi Revenue Department colony categories A\u2013H (2014, converted to \u20b9/sq ft)"
  },
  "credits": [
+  "Prices: SquareYards and Magicbricks project pages, Housing.com price trends, Delhi Revenue Department circle rates (2014), collected 29 Oct 2026",
   "Boundaries: districts \u00a9 OpenStreetMap contributors (ODbL); wards (DataMeet, CC BY-SA 2.5 IN; pre-2022 delimitation)",
   "Colonies: \u00a9 OpenStreetMap contributors (ODbL)"
  ],
  "pinsFrom": 14.6,
- "societies": false,
- "asOf": "2026-10-26",
- "builtAt": "2026-10-29 18:05 UTC",
+ "societies": true,
+ "surfaceStep": 0.002,
+ "pinSpread": true,
+ "coordNote": "Only about 6,000 of 12,315 Delhi rows have coordinates, and many share locality or sector centroids; society pins are approximate and some rows cannot be placed.",
+ "asOf": "2026-10-30",
+ "builtAt": "2026-10-30 07:21 UTC",
  "types": [
+  {
+   "id": "apartment",
+   "name": "Apartment",
+   "index": 0,
+   "sale": 866,
+   "rent": 0,
+   "sizeMin": 350,
+   "sizeMax": 9700
+  },
   {
    "id": "plot",
    "name": "Plot",
    "land": true,
-   "index": 0,
-   "sale": 2781,
+   "index": 1,
+   "sale": 157,
    "rent": 0,
    "sizeMin": 450,
    "sizeMax": 4500
@@ -46,42 +59,33 @@
   {
    "id": "floor",
    "name": "Builder floor",
-   "index": 1,
-   "sale": 3129,
-   "rent": 1755,
-   "sizeMin": 900,
-   "sizeMax": 3600
-  },
-  {
-   "id": "apartment",
-   "name": "Apartment",
    "index": 2,
-   "sale": 2144,
-   "rent": 1256,
-   "sizeMin": 600,
-   "sizeMax": 2200
+   "sale": 91,
+   "rent": 0,
+   "sizeMin": 0,
+   "sizeMax": 0
   }
  ],
  "bhk": [
   {
    "id": "1BHK",
-   "n": 385
+   "n": 59
   },
   {
    "id": "2BHK",
-   "n": 2503
+   "n": 196
   },
   {
    "id": "3BHK",
-   "n": 2069
+   "n": 201
   },
   {
    "id": "4BHK",
-   "n": 2112
+   "n": 151
   },
   {
    "id": "5BHK",
-   "n": 1215
+   "n": 80
   }
  ],
  "levels": [
@@ -117,25 +121,32 @@
  "heights": "heights/index.json",
  "report": {
   "files": [
-   "delhi_sample.csv"
+   "delhi_master_clean.csv"
   ],
-  "rowsRead": 12428,
-  "pointsUsed": 11065,
-  "sale": 8054,
-  "rent": 3011,
+  "rowsRead": 12315,
+  "pointsUsed": 1114,
+  "sale": 1114,
+  "rent": 0,
   "skipped": {
-   "duplicate": 779,
-   "outlier (typo or wrong unit)": 108
+   "no price or rent": 3142,
+   "no coordinates": 6323,
+   "duplicate": 242,
+   "outlier (typo or wrong unit)": 0,
+   "circle-rate row (official floor rate)": 1494
   },
-  "governmentRates": 476,
-  "portalReferences": 0,
+  "governmentRates": 2540,
+  "portalReferences": 243,
   "societySummariesUsed": 0,
-  "societies": 0,
+  "societies": 160,
+  "societiesListed": 3247,
   "areas": 238,
+  "corruptCoordinates": 0,
+  "rowsWithoutCoordinates": 6323,
   "wardMismatches": {},
+  "wardMismatchesTotal": 0,
   "outside": {
    "district": 0,
-   "ward": 0
+   "ward": 207
   }
  }
 }

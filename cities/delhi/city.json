@@ -1,16 +1,16 @@
 {
   "id": "delhi",
   "name": "Delhi",
-  "sample": true,
-  "dataLabel": "Sample listings, registered deals and broker inputs",
+  "sample": false,
+  "dataLabel": "SquareYards and Magicbricks project listings, Housing.com price trends, Delhi Revenue Department circle rates",
   "bbox": [76.83, 28.40, 77.35, 28.89],
   "view": { "center": [77.16, 28.62], "zoom": 10.35, "mobileZoom": 9.7, "pitch": 55, "bearing": -10 },
   "defaultUnit": "yd",
-  "guidance": { "label": "Circle rate", "source": "Delhi circle rates (sample)" },
+  "guidance": { "label": "Circle rate", "source": "Delhi Revenue Department colony categories A–H (2014, converted to ₹/sq ft)" },
   "types": [
+    { "id": "apartment", "name": "Apartment" },
     { "id": "plot", "name": "Plot", "land": true },
-    { "id": "floor", "name": "Builder floor" },
-    { "id": "apartment", "name": "Apartment" }
+    { "id": "floor", "name": "Builder floor" }
   ],
   "levels": [
     { "key": "district", "name": "District", "plural": "districts", "kind": "polygon", "file": "district.geojson", "from": 0, "fit": 10.6 },
@@ -18,7 +18,12 @@
     { "key": "area", "name": "Colony", "plural": "colonies", "kind": "point", "from": 12.9, "to": 15.6 }
   ],
   "pinsFrom": 14.6,
+  "societies": true,
+  "surfaceStep": 0.002,
+  "pinSpread": true,
+  "coordNote": "Only about 6,000 of 12,315 Delhi rows have coordinates, and many share locality or sector centroids; society pins are approximate and some rows cannot be placed.",
   "credits": [
+    "Prices: SquareYards and Magicbricks project pages, Housing.com price trends, Delhi Revenue Department circle rates (2014), collected 29 Oct 2026",
     "Boundaries: districts © OpenStreetMap contributors (ODbL); wards (DataMeet, CC BY-SA 2.5 IN; pre-2022 delimitation)",
     "Colonies: © OpenStreetMap contributors (ODbL)"
   ],

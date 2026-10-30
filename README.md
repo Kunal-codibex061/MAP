@@ -6,10 +6,11 @@ A map of what property costs, from city-wide areas down to individual streets an
 |---|---|---|
 | **Mumbai** | **Real, v2 (batches 1–4)**: SquareYards, Magicbricks, NoBroker and Housing.com listings, Maharashtra IGR ready reckoner (29 Oct 2026) | Region → BMC ward → Area → Society |
 | **Bengaluru** | **Real**: SquareYards and Magicbricks project listings, Housing.com area averages, Karnataka IGR guidance values (Gazette 30 Sep 2023) | GBA corporation → Zone → Ward → Locality → Society |
-| **Delhi** | Sample (invented), until the real file arrives | District → Ward → Colony |
+| **Delhi** | **Real**: SquareYards and Magicbricks project listings, Housing.com price trends, Delhi Revenue Department circle rates (2014; listings 29 Oct 2026) | District → Ward → Colony → Society |
 
-The map draws 15,758 Bengaluru points (5,698 priced societies) and 13,572 Mumbai points
-(7,881 priced societies); another 13,020 and 17,177 societies are searchable without prices.
+The map draws 15,758 Bengaluru points (5,698 priced societies), 13,572 Mumbai points
+(7,881 priced societies) and 1,114 Delhi points (160 priced societies); another 13,020,
+17,177 and 3,087 societies are searchable without prices.
 
 Live: https://bengaluru-price-map.vercel.app (`/mumbai`, `/delhi`, `/bengaluru`). Locally: `?city=mumbai`.
 
@@ -20,7 +21,7 @@ Bengaluru's master uses `society_name` instead of `society_or_layout`. Its `guid
 column is ₹ per sq ft and is deliberately not treated as a per-sq-m rate; Karnataka IGR rows
 are recognised by their source name and use `price_per_sqft`.
 
-1. Put the CSV file(s) in `cities/<city>/raw/`. Every CSV in that folder is merged, so add a new batch next to the existing one rather than replacing it. Bengaluru and Mumbai now use their real masters; Delhi still uses `delhi_sample.csv`.
+1. Put the CSV file(s) in `cities/<city>/raw/`. Every CSV in that folder is merged, so add a new batch next to the existing one rather than replacing it. Bengaluru and Mumbai use their real masters; Delhi uses `delhi_master_clean.csv` plus the handoff pack, built with `python3 tools/build_delhi.py` (its source has many rows without coordinates, so the general ingest would produce a much smaller market set).
 2. Run:
    ```bash
    python3 tools/ingest.py mumbai
@@ -82,14 +83,15 @@ redeploy.
 - `cities/<city>/`: `city.json`, `raw/*.csv` and `boundaries/`.
 - `tools/`:
   - `ingest.py`: CSV to map data.
+  - `build_delhi.py`: Delhi handoff build (market pins + circle-rate guidance).
   - `fetch_boundaries.py`: one-time boundary download; needs `shapely`.
   - `build_heights.py`: building heights; needs `rasterio numpy s2sphere`.
   - `sample_csv.py`: sample CSVs for a city without real data (Delhi).
   - `optional-requirements.txt`: optional dependencies for `fetch_boundaries.py` and `build_heights.py`.
 
 ## How the map works
-- **Levels.** Each city's polygon levels fade into one another as you zoom. Point levels (areas, colonies, localities) appear next, then pins. Mumbai and Bengaluru pins are societies; click one for every configuration and its source link.
-- **Society pins.** Only priced societies are pinned (5,698 in Bengaluru, 7,881 in Mumbai). Societies without prices are searchable and open a "no price yet" panel. In Bengaluru many societies share a locality centroid, so pins are fanned slightly on a golden-angle spiral for display; panels disclose when a location is approximate.
+- **Levels.** Each city's polygon levels fade into one another as you zoom. Point levels (areas, colonies, localities) appear next, then pins. Mumbai, Bengaluru and Delhi pins are societies; click one for every configuration and its source link.
+- **Society pins.** Only priced societies are pinned (5,698 in Bengaluru, 7,881 in Mumbai, 160 in Delhi). Societies without prices are searchable and open a "no price yet" panel. Where many societies share a locality centroid, pins are fanned slightly on a golden-angle spiral for display; panels disclose when a location is approximate.
 - **Medians.** Every area shows the median. Where societies exist, it's the median of society medians, and "low confidence" means fewer than 3 societies, so one big project can't dominate. Elsewhere, "low confidence" means fewer than 5 data points.
 - **Colours.** 10 percentile steps from the ward level (blue = cheaper, red = pricier), shared by every level.
 - **Buildings.** Each building is coloured by the prices within about 1 km (nearer points count more) and stands at its real height from Google Open Buildings 2.5D (2023).
@@ -100,7 +102,7 @@ redeploy.
 ## Known limits
 - **Mumbai:** asking prices, not registered deals. 5,247 rows had no coordinates and 9 had corrupt coordinates, so they are not on the map; the CSV ward differs from the coordinate's ward on 1,164 rows (the map uses coordinates). 3,209 priced rows are above ₹50,000/sq ft; the 0.3–3× area-median rule trims the implausible ones, but prime-area medians stay high. Using scraped portal data commercially carries legal risk (see `data/<city>/report.json`).
 - **Bengaluru:** 43,755 of 49,792 rows are located at their locality or sub-locality centroid, not the building (2,589 distinct coordinates overall). Pins are spread where several societies share one point. 2,812 cleaned points (about 18%) fall outside the BBMP ward polygons, mostly in the Outskirts; they still appear as pins and area data.
-- **No rent data** in either real master, so the Rent switch is disabled for Mumbai and Bengaluru.
-- **Delhi** remains sample data; its wards are the pre-2022 delimitation.
+- **Delhi:** real listings and circle rates, but only about 5,990 of 12,315 rows have coordinates (6,323 cannot be placed). 1,494 circle-rate rows are kept as guidance, not as market pins. Only 3 of the 160 priced societies have society-level coordinates, so most Delhi pins are locality/sector centroids fanned out for clicking. 207 points have no matching ward polygon (district is still assigned). No rent data.
+- **No rent data** in any real master, so the Rent switch is disabled.
 - **Building heights** are satellite estimates (2023) and the tiles cover the previous city boxes; buildings on the new outskirts are flat.
-- **Raw masters:** the two real CSVs are tracked in Git (~30 MB) for reproducibility, but are excluded from Vercel deploys.
+- **Raw masters:** the three real CSVs are tracked in Git (~33 MB) for reproducibility, but are excluded from Vercel deploys.

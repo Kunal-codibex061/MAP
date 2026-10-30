@@ -35,7 +35,7 @@
  "pinSpread": true,
  "coordNote": "Most Bengaluru rows are located at their locality or sub-locality centroid; only about 4,400 rows have society-level coordinates, so some society pins are approximate.",
  "asOf": "2026-10-29",
- "builtAt": "2026-10-30 06:32 UTC",
+ "builtAt": "2026-10-30 07:22 UTC",
  "types": [
   {
    "id": "apartment",

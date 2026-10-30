@@ -1,23 +1,30 @@
 {
  "files": [
-  "delhi_sample.csv"
+  "delhi_master_clean.csv"
  ],
- "rowsRead": 12428,
- "pointsUsed": 11065,
- "sale": 8054,
- "rent": 3011,
+ "rowsRead": 12315,
+ "pointsUsed": 1114,
+ "sale": 1114,
+ "rent": 0,
  "skipped": {
-  "duplicate": 779,
-  "outlier (typo or wrong unit)": 108
+  "no price or rent": 3142,
+  "no coordinates": 6323,
+  "duplicate": 242,
+  "outlier (typo or wrong unit)": 0,
+  "circle-rate row (official floor rate)": 1494
  },
- "governmentRates": 476,
- "portalReferences": 0,
+ "governmentRates": 2540,
+ "portalReferences": 243,
  "societySummariesUsed": 0,
- "societies": 0,
+ "societies": 160,
+ "societiesListed": 3247,
  "areas": 238,
+ "corruptCoordinates": 0,
+ "rowsWithoutCoordinates": 6323,
  "wardMismatches": {},
+ "wardMismatchesTotal": 0,
  "outside": {
   "district": 0,
-  "ward": 0
+  "ward": 207
  }
 }
